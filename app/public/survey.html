@@ -157,30 +157,45 @@
     </div>
 
 <!--Add javascript/jquery to connect button/send information-->
-<script>
-
-//onclick for the submit button
-    $("#submit").on("click", function() {
-
+<script type="text/javascript">
+    //Chosen CSS
+    var config = {
+        ".chosen-select": {},
+        ".chosen-select-deselect": {
+            allow_single_deselect: true
+        },
+        ".chosen-select-no-single": {
+            disable_search_threshold: 10
+        },
+        ".chosen-select-no-results": {
+            no_results_text: "Oops, nothing found!"
+        },
+        ".chosen-select-width": {
+            width: "95%"
+        }
+    };
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    };
+    $("#submit").on("click", function () {
+        //form validation
         function validateForm() {
             var isValid = true;
-            $(".form-control").each(function() {
+            $(".form-contol").each(function () {
                 if ($(this).val() === "") {
                     isValid = false;
                 }
             });
-
-            $(".chosen-select").each(function() {
+            $(".chosen-select").each(function () {
                 if ($(this).val() === "") {
-                isValid = false;
-            }
+                    isValid = false;
+                }
             });
             return isValid;
         }
-        
         //If all required fields are valid
         if (validateForm()) {
-            //Creatse an object for the user data
+            //Create an object for the user data
             var userData = {
                 name: $("#name").val(),
                 photo: $("#photo").val(),
@@ -197,24 +212,31 @@
                     $("#q10").val()
                 ]
             };
-
             //Grab the URL of the current page
             var currentURL = window.location.origin;
-
-                //AJAX post the data to the friends API
-                $.post(currentURL + "/api/friends", userData, function (data) {
-                    //Grab the result from the AJAX post so the name and photo are displayed
-                    $("#matchName").text(data.name);
-                    $("#matchImg").attr("src", data.photo);
-                    //Show the modal with the best match
-                    $("#resultsModal").modal("toggle");
-                });
-            } else {
-                alert("Please answer everything before submitting!");
-            }
-            return false;
-    });
-
+            //AJAX post the data to the friends API
+            $.post(currentURL + "/api/friends", userData, function (data) {
+                //Grab the result from the AJAX post so the name and photo are displayed
+                $("#matchName").text(data.name);
+                $("#matchImg").attr("src", data.photo);
+                //Show the modal with the best match
+                $("#resultsModal").modal("toggle");
+            });
+        } else {
+            alert("Please fill out all fields before submitting!");
+        }
+        return false;
+    })
 </script>
+
+<!-- Used for Bootstrap -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+
 </body>
 </html>

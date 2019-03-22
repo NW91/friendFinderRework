@@ -1,50 +1,53 @@
-var friendsData = require('../data/friend.js');
-var path = require('path');
+var friends = require("../data/friends.js");
 
+module.exports = function (app) {
 
-module.exports = function(app, path) {
-    app.get("/api/friends", function(req, res){
-        res.json(friendsData);
+    app.get("/api/friends", function(req, res) {
+        res.json(friends);
     });
 
     app.post("/api/friends", function(req, res) {
-        var perfectMatch = {
+
+        var bestMatch = {
             name: "",
             photo: "",
-            // friendDifference = 1000
+            friendDifference: 1000
         };
 
-        //user data
+        //User's survey result is POSTed and parsed.
         var userData = req.body;
         var userScores = userData.scores;
 
+        //This calculates the difference between the user scores and scores of those in the DB.
         var totalDifference = 0;
 
-        //Loops through friendfinder in Database
-        for (var i = 0; i < friendsData.length; i++) {
+        //Loop through all friends
+        for (var i = 0; i <friends.length; i++) {
+            
             totalDifference = 0;
 
-            console.log(friendsData[i]);
-            totalDifference = 0;
+            //Loop through all scores of all frineds
+            for (var j = 0; j < friends[i].scores[j]; j++) {
 
-            //Looping through every score within the friendfinder Database.
-            for (var j = 0; j <friendsData[i].scores[j]; j++) {
-                totalDifference += Math.abs(parseInt(userScores[j]) - parseInt(friendsData[i].scores[j]));
-               
-            if (totalDifference <= perfectMatch.friendsDataDifference) {
+                //Calculate the differences between scores and add sum to totalDifference
+                totalDifference += Math.abs(parseInt(userScores[j]) - parseInt(friends[i].scores[j]));
 
-                perfectMatch.name = friendsData[i].name;
-                perfectMatch.photo = friendsData[i].photo;
-                perfectMatch.friendsDataDifference = totalDifference;
+                //If sum of differences is less then the differences of the current match
+                if (totalDifference <= bestMatch.friendDifference) {
+
+                    //Reset the bestMatch to be the new friend.
+                    bestMatch.name = friends[i].name;
+                    bestMatch.photo = friends[i].photo;
+                    bestMatch.friendDifference = totalDifference;
+                }
             }
         }
-            
-    }
 
-    //saves to the user's inputted data to the database
-    friendsData.push(userData);
-    
-    res.json(perfectMatch)
+        //Finally save the user's data to the database
+        friends.push(userData);
 
+        //Return JSON with the user's bestMatch.
+        res.json(bestMatch);
     });
+
 }

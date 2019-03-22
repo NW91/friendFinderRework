@@ -1,4 +1,4 @@
-var friendsData = [
+var friends = [
     {
     "name":"Ahmed",
     "photo":"https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/6/005/064/1bd/3435aa3.jpg",
@@ -49,13 +49,5 @@ var friendsData = [
         }
   ];
 
-//   var addFriend = function(app) {
-//       app.post("/survey", function(req, res) {
-//           var newFriend = req.body;
-//           friendsData.push(newFriend);
-//           res.send(friendsData);
-//       });
-//   };
 
-  module.exports = friendsData;
-//   module.exports.addFriend = addFriend;
+  module.exports = friends;
