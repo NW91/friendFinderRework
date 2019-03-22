@@ -16,7 +16,9 @@ app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }));
 //parse HTML body into string
 app.use(bodyParser.text({ type: 'text/html' }))
 
+//setting up the root paths
 require("./app/routing/apiRoutes.js")(app);
+
 require("./app/routing/htmlRoutes.js")(app);
 
 app.listen(PORT, function() {
