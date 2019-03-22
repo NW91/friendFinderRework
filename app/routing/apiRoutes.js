@@ -14,7 +14,7 @@ module.exports = function (app) {
             friendDifference: 1000
         };
 
-        //User's survey result is POSTed and parsed.
+        //User's survey result is Posted and parsed.
         var userData = req.body;
         var userScores = userData.scores;
 
